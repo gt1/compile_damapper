@@ -13,3 +13,5 @@ Please see https://github.com/thegenemyers/DAMAPPER for using DAMAPPER to produc
 
 If you want BAM output files then please see the programs call.damapper (described at https://github.com/gt1/lastools)
 and damapper_bwt (https://github.com/gt1/damapper_bwt).
+
+Precompiled Linux x86_64 binaries can be found at https://github.com/gt1/damapper_bwt/releases .
