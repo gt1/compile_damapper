@@ -64,7 +64,12 @@ NPROC=`nproc`
 
 BUILD_GCC=gcc
 
-INSTALLDIR=$PWD/tools
+if [ $# -lt 1 ] ; then
+	echo "usage: $0 <installprefix>"
+	exit 1
+fi
+
+INSTALLDIR=$1
 
 if [ "${ARCH}" = "Darwin" ] ; then
 	SHARED_LIBRARY_SUFFIX=".dylib"
