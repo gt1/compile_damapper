@@ -71,10 +71,28 @@ fi
 
 INSTALLDIR=$1
 
+mkdir -p ${INSTALLDIR}
+pushd ${INSTALLDIR}
+INSTALLDIR=$PWD
+popd
+
 if [ "${ARCH}" = "Darwin" ] ; then
 	SHARED_LIBRARY_SUFFIX=".dylib"
 else
 	SHARED_LIBRARY_SUFFIX=".so"
+fi
+
+if [ ! -e ${INSTALLDIR}/bin/LAsort ] ; then
+	curl --location https://github.com/thegenemyers/DALIGNER/archive/master.zip > DALIGNER.zip
+	rm -fR DALIGNER-master
+	unzip DALIGNER.zip
+	rm -f DALIGNER.zip
+	cd DALIGNER-master
+	make -j${NPROC}
+	mkdir -p ${INSTALLDIR}/bin
+	cp -p daligner HPC.daligner LAsort LAmerge LAsplit LAcat LAshow LAcheck ${INSTALLDIR}/bin
+	cd ..
+	rm -fR DALIGNER-master
 fi
 
 if [ ! -e ${INSTALLDIR}/lib/libalign${SHARED_LIBRARY_SUFFIX} ] ; then
@@ -125,5 +143,6 @@ if [ ! -e ${INSTALLDIR}/bin/fasta2DAM ] ; then
 	cd ..
 	rm -fR DAZZ_DB-master
 fi
+
 
 exit 0
