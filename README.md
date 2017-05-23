@@ -1,7 +1,9 @@
 # compile_damapper
 This project contains a script for compiling and installing damapper (https://github.com/thegenemyers/DAMAPPER) 
 and damapper_bwt (https://github.com/gt1/damapper_bwt) as well as some support tools like 
-lastools (see https://github.com/gt1/lastools), biobambam2 (see https://github.com/gt1/biobambam2) and DAZZ_DB (see https://github.com/thegenemyers/DAZZ_DB).
+lastools (see https://github.com/gt1/lastools), biobambam2 (see
+https://github.com/gt1/biobambam2), DAZZ_DB (see https://github.com/thegenemyers/DAZZ_DB)
+and DEXTRACTOR (see https://github.com/thegenemyers/DEXTRACTOR).
 
 The script can be called using
 

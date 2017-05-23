@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #    compile_damapper
-#    Copyright (C) 2016 German Tischler
+#    Copyright (C) 2016-2017 German Tischler
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -36,6 +36,33 @@ function nproc
 	fi
 
 	echo $NUMPROC
+}
+
+function buildhdf5
+{
+	rm -fR hdf5-1.8.18 hdf5-1.8.18-src hdf5-1.8.18-build
+	curl --location https://support.hdfgroup.org/ftp/HDF5/current18/src/hdf5-1.8.18.tar.gz | tar xzvf -
+	mv hdf5-1.8.18 hdf5-1.8.18-src
+	mkdir -p hdf5-1.8.18-build
+	cd hdf5-1.8.18-build
+	../hdf5-1.8.18-src/configure --enable-static --disable-shared $*
+	make -j`nproc`
+	make -j`nproc` install
+	cd ..
+	rm -fR hdf5-1.8.18 hdf5-1.8.18-src hdf5-1.8.18-build
+}
+
+function builddextractor
+{
+	curl --location https://github.com/thegenemyers/DEXTRACTOR/archive/master.zip > DEXTRACTOR.zip
+	rm -fR DEXTRACTOR-master
+	unzip DEXTRACTOR.zip
+	cd DEXTRACTOR-master
+	sed -e "s|-lz|-lz -ldl -lm|" -i  Makefile
+	make PATH_HDF5=$1
+	make install DEST_DIR=$1/bin
+	cd ..
+	rm -fR DEXTRACTOR.zip DEXTRACTOR-master
 }
 
 function buildlatest
@@ -75,6 +102,9 @@ mkdir -p ${INSTALLDIR}
 pushd ${INSTALLDIR}
 INSTALLDIR=$PWD
 popd
+
+buildhdf5 --prefix=${INSTALLDIR}
+builddextractor ${INSTALLDIR}
 
 if [ "${ARCH}" = "Darwin" ] ; then
 	SHARED_LIBRARY_SUFFIX=".dylib"
@@ -143,6 +173,5 @@ if [ ! -e ${INSTALLDIR}/bin/fasta2DAM ] ; then
 	cd ..
 	rm -fR DAZZ_DB-master
 fi
-
 
 exit 0
